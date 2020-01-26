@@ -9,6 +9,7 @@ import top.aftery.common.entity.StatusCode;
 import top.aftery.recruit.pojo.Enterprise;
 import top.aftery.recruit.service.EnterpriseService;
 
+import java.util.List;
 import java.util.Map;
 /**
  * @ClassName EnterpriseController
@@ -24,6 +25,12 @@ public class EnterpriseController {
 
 	@Autowired
 	private EnterpriseService enterpriseService;
+
+	@GetMapping("/search/hotlist")
+	public Result hotlist(){
+		List<Enterprise> hotlist = enterpriseService.hotlist("1");
+		return  new Result(true,StatusCode.OK,"查询成功",hotlist);
+	}
 	
 	
 	/**

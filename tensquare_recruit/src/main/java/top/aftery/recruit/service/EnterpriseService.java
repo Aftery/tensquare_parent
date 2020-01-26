@@ -33,6 +33,10 @@ public class EnterpriseService {
     @Autowired
     private EnterpriseDao enterpriseDao;
 
+    public List<Enterprise> hotlist(String ishot) {
+        return enterpriseDao.findByIshot(ishot);
+    }
+
 
     /**
      * 查询全部列表
