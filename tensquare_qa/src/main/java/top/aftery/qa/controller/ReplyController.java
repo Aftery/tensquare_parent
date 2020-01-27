@@ -1,36 +1,30 @@
 package top.aftery.qa.controller;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import top.aftery.common.entity.PageResult;
 import top.aftery.common.entity.Result;
 import top.aftery.common.entity.StatusCode;
-import top.aftery.qa.pojo.Problem;
-import top.aftery.qa.service.ProblemService;
+import top.aftery.qa.pojo.Reply;
+import top.aftery.qa.service.ReplyService;
+
+import java.util.Map;
 
 /**
- * @ClassName ProblemController
- * @Description ProblemController
+ * @ClassName ReplyController
+ * @Description ReplyController
  * @Author Aftery
  * @Date 2020/1/20 14:43
  * @Version 1.0
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/problem")
-public class ProblemController {
+@RequestMapping("/reply")
+public class ReplyController {
 
 	@Autowired
-	private ProblemService problemService;
+	private ReplyService replyService;
 	
 	
 	/**
@@ -39,7 +33,7 @@ public class ProblemController {
 	 */
 	@RequestMapping(method= RequestMethod.GET)
 	public Result findAll(){
-		return new Result(true, StatusCode.OK,"查询成功",problemService.findAll());
+		return new Result(true, StatusCode.OK,"查询成功",replyService.findAll());
 	}
 	
 	/**
@@ -49,7 +43,7 @@ public class ProblemController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.GET)
 	public Result findById(@PathVariable String id){
-		return new Result(true,StatusCode.OK,"查询成功",problemService.findById(id));
+		return new Result(true,StatusCode.OK,"查询成功",replyService.findById(id));
 	}
 
 
@@ -62,8 +56,8 @@ public class ProblemController {
 	 */
 	@RequestMapping(value="/search/{page}/{size}",method=RequestMethod.POST)
 	public Result findSearch(@RequestBody Map searchMap , @PathVariable int page, @PathVariable int size){
-		Page<Problem> pageList = problemService.findSearch(searchMap, page, size);
-		return  new Result(true,StatusCode.OK,"查询成功",  new PageResult<Problem>(pageList.getTotalElements(), pageList.getContent()) );
+		Page<Reply> pageList = replyService.findSearch(searchMap, page, size);
+		return  new Result(true,StatusCode.OK,"查询成功",  new PageResult<Reply>(pageList.getTotalElements(), pageList.getContent()) );
 	}
 
 	/**
@@ -73,27 +67,27 @@ public class ProblemController {
      */
     @RequestMapping(value="/search",method = RequestMethod.POST)
     public Result findSearch( @RequestBody Map searchMap){
-        return new Result(true,StatusCode.OK,"查询成功",problemService.findSearch(searchMap));
+        return new Result(true,StatusCode.OK,"查询成功",replyService.findSearch(searchMap));
     }
 	
 	/**
 	 * 增加
-	 * @param problem
+	 * @param reply
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public Result add(@RequestBody Problem problem  ){
-		problemService.add(problem);
+	public Result add(@RequestBody Reply reply  ){
+		replyService.add(reply);
 		return new Result(true,StatusCode.OK,"增加成功");
 	}
 	
 	/**
 	 * 修改
-	 * @param problem
+	 * @param reply
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.PUT)
-	public Result update(@RequestBody Problem problem, @PathVariable String id ){
-		problem.setId(id);
-		problemService.update(problem);		
+	public Result update(@RequestBody Reply reply, @PathVariable String id ){
+		reply.setId(id);
+		replyService.update(reply);		
 		return new Result(true,StatusCode.OK,"修改成功");
 	}
 	
@@ -103,7 +97,7 @@ public class ProblemController {
 	 */
 	@RequestMapping(value="/{id}",method= RequestMethod.DELETE)
 	public Result delete(@PathVariable String id ){
-		problemService.deleteById(id);
+		replyService.deleteById(id);
 		return new Result(true,StatusCode.OK,"删除成功");
 	}
 	

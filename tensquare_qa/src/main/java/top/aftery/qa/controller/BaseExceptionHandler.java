@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.aftery.common.entity.Result;
 import top.aftery.common.entity.StatusCode;
-
+/**
+ *
+ */
 /**
  * @ClassName BaseExceptionHandler
  * @Description 统一异常处理类
  * @Author Aftery
- * @Date 2020/1/26 10:38
+ * @Date 2020/1/20 14:43
  * @Version 1.0
  */
 @ControllerAdvice

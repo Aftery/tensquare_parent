@@ -3,7 +3,6 @@ package top.aftery.qa.pojo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @ClassName Problem
  * @Description Problem
  * @Author Aftery
- * @Date 2020/1/26 10:38
+ * @Date 2020/1/27 19:43
  * @Version 1.0
  */
 @Getter

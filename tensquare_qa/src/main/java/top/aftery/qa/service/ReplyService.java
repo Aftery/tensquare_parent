@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import top.aftery.qa.dao.ProblemDao;
-import top.aftery.qa.pojo.Problem;
+import top.aftery.qa.dao.ReplyDao;
+import top.aftery.qa.pojo.Reply;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,25 +19,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName ProblemService
- * @Description ProblemService
+ * @ClassName ReplyService
+ * @Description ReplyService
  * @Author Aftery
  * @Date 2020/1/27 19:43
  * @Version 1.0
  */
 @Service
-public class ProblemService {
+public class ReplyService {
 
 	@Autowired
-	private ProblemDao problemDao;
+	private ReplyDao replyDao;
 
 
 	/**
 	 * 查询全部列表
 	 * @return
 	 */
-	public List<Problem> findAll() {
-		return problemDao.findAll();
+	public List<Reply> findAll() {
+		return replyDao.findAll();
 	}
 
 	
@@ -48,10 +48,10 @@ public class ProblemService {
 	 * @param size
 	 * @return
 	 */
-	public Page<Problem> findSearch(Map whereMap, int page, int size) {
-		Specification<Problem> specification = createSpecification(whereMap);
+	public Page<Reply> findSearch(Map whereMap, int page, int size) {
+		Specification<Reply> specification = createSpecification(whereMap);
 		PageRequest pageRequest =  PageRequest.of(page-1, size);
-		return problemDao.findAll(specification, pageRequest);
+		return replyDao.findAll(specification, pageRequest);
 	}
 
 	
@@ -60,9 +60,9 @@ public class ProblemService {
 	 * @param whereMap
 	 * @return
 	 */
-	public List<Problem> findSearch(Map whereMap) {
-		Specification<Problem> specification = createSpecification(whereMap);
-		return problemDao.findAll(specification);
+	public List<Reply> findSearch(Map whereMap) {
+		Specification<Reply> specification = createSpecification(whereMap);
+		return replyDao.findAll(specification);
 	}
 
 	/**
@@ -70,26 +70,26 @@ public class ProblemService {
 	 * @param id
 	 * @return
 	 */
-	public Problem findById(String id) {
-		return problemDao.findById(id).get();
+	public Reply findById(String id) {
+		return replyDao.findById(id).get();
 	}
 
 	/**
 	 * 增加
-	 * @param problem
+	 * @param reply
 	 */
-	public void add(Problem problem) {
+	public void add(Reply reply) {
 		Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-		problem.setId(snowflake.nextId() + "");
-		problemDao.save(problem);
+		reply.setId(snowflake.nextId() + "");
+		replyDao.save(reply);
 	}
 
 	/**
 	 * 修改
-	 * @param problem
+	 * @param reply
 	 */
-	public void update(Problem problem) {
-		problemDao.save(problem);
+	public void update(Reply reply) {
+		replyDao.save(reply);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class ProblemService {
 	 * @param id
 	 */
 	public void deleteById(String id) {
-		problemDao.deleteById(id);
+		replyDao.deleteById(id);
 	}
 
 	/**
@@ -105,40 +105,32 @@ public class ProblemService {
 	 * @param searchMap
 	 * @return
 	 */
-	private Specification<Problem> createSpecification(Map searchMap) {
+	private Specification<Reply> createSpecification(Map searchMap) {
 
-		return new Specification<Problem>() {
+		return new Specification<Reply>() {
 
 			@Override
-			public Predicate toPredicate(Root<Problem> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Reply> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicateList = new ArrayList<Predicate>();
-                // ID
+                // 编号
                 if (searchMap.get("id")!=null && !"".equals(searchMap.get("id"))) {
                 	predicateList.add(cb.like(root.get("id").as(String.class), "%"+(String)searchMap.get("id")+"%"));
                 }
-                // 标题
-                if (searchMap.get("title")!=null && !"".equals(searchMap.get("title"))) {
-                	predicateList.add(cb.like(root.get("title").as(String.class), "%"+(String)searchMap.get("title")+"%"));
+                // 问题ID
+                if (searchMap.get("problemid")!=null && !"".equals(searchMap.get("problemid"))) {
+                	predicateList.add(cb.like(root.get("problemid").as(String.class), "%"+(String)searchMap.get("problemid")+"%"));
                 }
-                // 内容
+                // 回答内容
                 if (searchMap.get("content")!=null && !"".equals(searchMap.get("content"))) {
                 	predicateList.add(cb.like(root.get("content").as(String.class), "%"+(String)searchMap.get("content")+"%"));
                 }
-                // 用户ID
+                // 回答人ID
                 if (searchMap.get("userid")!=null && !"".equals(searchMap.get("userid"))) {
                 	predicateList.add(cb.like(root.get("userid").as(String.class), "%"+(String)searchMap.get("userid")+"%"));
                 }
-                // 昵称
+                // 回答人昵称
                 if (searchMap.get("nickname")!=null && !"".equals(searchMap.get("nickname"))) {
                 	predicateList.add(cb.like(root.get("nickname").as(String.class), "%"+(String)searchMap.get("nickname")+"%"));
-                }
-                // 是否解决
-                if (searchMap.get("solve")!=null && !"".equals(searchMap.get("solve"))) {
-                	predicateList.add(cb.like(root.get("solve").as(String.class), "%"+(String)searchMap.get("solve")+"%"));
-                }
-                // 回复人昵称
-                if (searchMap.get("replyname")!=null && !"".equals(searchMap.get("replyname"))) {
-                	predicateList.add(cb.like(root.get("replyname").as(String.class), "%"+(String)searchMap.get("replyname")+"%"));
                 }
 				
 				return cb.and( predicateList.toArray(new Predicate[predicateList.size()]));
