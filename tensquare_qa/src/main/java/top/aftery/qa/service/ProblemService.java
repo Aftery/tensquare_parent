@@ -5,10 +5,12 @@ import cn.hutool.core.util.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import top.aftery.qa.dao.ProblemDao;
 import top.aftery.qa.pojo.Problem;
+import top.aftery.qa.pojo.Reply;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -31,6 +33,20 @@ public class ProblemService {
 	@Autowired
 	private ProblemDao problemDao;
 
+	public Page<Problem> newlist(String labelid, int page,int size){
+		Pageable pageable=PageRequest.of(page-1,size);
+		return problemDao.newlist(labelid,pageable);
+	}
+
+	public Page<Problem> hotlist(String labelid,int page,int size){
+		Pageable pageable=PageRequest.of(page-1,size);
+		return problemDao.hotlist(labelid,pageable);
+	}
+
+	public Page<Problem> waitlist(String labelid,int page,int size){
+		Pageable pageable=PageRequest.of(page-1,size);
+		return problemDao.waitlist(labelid,pageable);
+	}
 
 	/**
 	 * 查询全部列表
