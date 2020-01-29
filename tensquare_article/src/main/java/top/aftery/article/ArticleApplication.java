@@ -16,5 +16,5 @@ public class ArticleApplication {
 		SpringApplication.run(ArticleApplication.class, args);
 	}
 
-	
+
 }
