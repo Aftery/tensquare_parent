@@ -15,5 +15,5 @@ docker run -di --name=tensquare_elasticsearch -p 9200:9200 -p 9300:9300 daocloud
 > #然后重新启动容器
 > ~~~
 浏览器输入地址：http://ip:9200/ 即可看到如下信息
-
+![1](https://github.com/Aftery/tensquare_parent/blob/master/doc/images/1580530967.jpg)
  
