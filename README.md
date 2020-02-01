@@ -14,6 +14,37 @@ docker run -di --name=tensquare_elasticsearch -p 9200:9200 -p 9300:9300 daocloud
 > sysctl ‐p
 > #然后重新启动容器
 > ~~~
-浏览器输入地址：http://ip:9200/ 即可看到如下信息
-![1](https://github.com/Aftery/tensquare_parent/blob/master/doc/images/1580530967.jpg)
+浏览器输入地址：http://ip:9200/ 即可看到如下信息,即成功了。
+![](doc/images/1580531868(1).jpg)
+ 
+ 
+> 访问：http://127.0.0.1:9007/search/学/1/1 可以看到一下结果就🆗了
+![](doc/images/微信截图_20200201143408.png)
+----
+> 在postman中请求的结果可以看到对于中文是单给分词的，这显然是不符合要求的，所以我们需要安装中文分词器来解决这个问题
+![](doc/images/微信截图_20200201144130.png)
+
+[ik分词器下载地址](https://github.com/medcl/elasticsearch-analysis-ik/releases) :下载对应的版本
+
+> 将ik分词器解压后传入服务器
+>~~~shell script
+># 拷贝解压包到elasticsearch容器的plugins目录下
+>docker cp elasticsearch-analysis-ik-6.6.2/ tensquare_elasticsearch:/usr/share/elasticsearch/plugins/
+>~~~
+----
+> 重启容器
+> ~~~shell script
+>  docker restart tensquare_elasticsearch
+>  ~~~
+---
+###测试分词器效果
+![](doc/images/微信截图_20200201165049.png)
+
+
+ 
+
+
+
+
+
  
