@@ -2,6 +2,7 @@ package top.aftery.user.controller;
 
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.StrUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -9,9 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import top.aftery.common.entity.PageResult;
 import top.aftery.common.entity.Result;
 import top.aftery.common.entity.StatusCode;
+import top.aftery.common.util.JwtUtil;
 import top.aftery.user.pojo.User;
 import top.aftery.user.service.UserService;
 
+import javax.crypto.interfaces.PBEKey;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,6 +35,30 @@ public class UserController {
 
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    /**
+     * 用户登录
+     *
+     * @param user
+     * @return
+     */
+    @PostMapping("/login")
+    public Result login(@RequestBody User user) {
+        user = userService.login(user.getMobile(), user.getPassword());
+        if (user == null) {
+            return new Result(false, StatusCode.LOGINERROR, "登录失败");
+        }
+        //生成token
+        String token = jwtUtil.createJWT(user.getId(), user.getNickname(), "user");
+        Map<String, String> map = new HashMap<>();
+        map.put("token", token);
+        map.put("roles", "user");
+        return new Result(true, StatusCode.OK, "登录成功", map);
+
+    }
 
     @PostMapping("/sendsms/{mobile}")
     public Result sendSms(@PathVariable String mobile) {
@@ -132,6 +160,7 @@ public class UserController {
 
     /**
      * 删除
+     * 必须是管理员才能删除
      *
      * @param id
      */

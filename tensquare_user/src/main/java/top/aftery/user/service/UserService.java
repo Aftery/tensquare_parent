@@ -4,17 +4,19 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Error;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import top.aftery.common.util.JwtUtil;
 import top.aftery.user.dao.UserDao;
 import top.aftery.user.pojo.User;
 
@@ -22,6 +24,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Struct;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +50,30 @@ public class UserService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    /**
+     * 用户登录
+     *
+     * @param mobile
+     * @param password
+     * @return
+     */
+    public User login(String mobile, String password) {
+        User byMobile = userDao.findByMobile(mobile);
+        if (byMobile != null && encoder.matches(password, byMobile.getPassword())) {
+            return byMobile;
+        }
+        return null;
+    }
+
     /**
      * 发送短信验证码
      *
@@ -62,7 +90,7 @@ public class UserService {
         Map<String, String> map = new HashMap();
         map.put("mobile", mobile);
         map.put("code", code);
-        rabbitTemplate.convertAndSend("sms", map);
+        // rabbitTemplate.convertAndSend("sms", map);
 
     }
 
@@ -133,6 +161,7 @@ public class UserService {
         user.setUpdatedate(new Date());
         //最后登陆日期
         user.setLastdate(new Date());
+        user.setPassword(encoder.encode(user.getPassword()));
         userDao.save(user);
     }
 
@@ -151,6 +180,10 @@ public class UserService {
      * @param id
      */
     public void deleteById(String id) {
+        String admin_claims = (String) request.getAttribute("admin_claims");
+        if (StrUtil.isNotEmpty(admin_claims)) {
+            throw new RuntimeException("权限不足，不能删除");
+        }
         userDao.deleteById(id);
     }
 
@@ -203,19 +236,10 @@ public class UserService {
                 if (searchMap.get("personality") != null && !"".equals(searchMap.get("personality"))) {
                     predicateList.add(cb.like(root.get("personality").as(String.class), "%" + (String) searchMap.get("personality") + "%"));
                 }
-
                 return cb.and(predicateList.toArray(new Predicate[predicateList.size()]));
 
             }
         };
-
-    }
-
-    public void regist(User user, String code) {
-        if (StrUtil.isEmpty(code)) {
-
-
-        }
 
     }
 }

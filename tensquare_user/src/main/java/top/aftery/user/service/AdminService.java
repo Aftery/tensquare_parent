@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.aftery.user.dao.AdminDao;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,25 @@ public class AdminService {
 
     @Autowired
     private AdminDao adminDao;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+
+    /**
+     * 管理员登录
+     *
+     * @param admin
+     * @return
+     */
+    public Admin login(Admin admin) {
+
+        Admin byLoginname = adminDao.findByLoginname(admin.getLoginname());
+        if (byLoginname != null && encoder.matches(admin.getPassword(), byLoginname.getPassword())) {
+            return byLoginname;
+        }
+        return null;
+    }
 
 
     /**
@@ -88,6 +109,7 @@ public class AdminService {
     public void add(Admin admin) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
         admin.setId(snowflake.nextId() + "");
+        admin.setPassword(encoder.encode(admin.getPassword()));
         adminDao.save(admin);
     }
 
@@ -145,5 +167,6 @@ public class AdminService {
         };
 
     }
+
 
 }
