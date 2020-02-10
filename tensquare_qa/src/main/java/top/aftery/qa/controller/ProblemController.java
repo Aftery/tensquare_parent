@@ -1,5 +1,6 @@
 package top.aftery.qa.controller;
 
+import cn.hutool.core.util.StrUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,8 @@ import top.aftery.common.entity.StatusCode;
 import top.aftery.qa.pojo.Problem;
 import top.aftery.qa.service.ProblemService;
 
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Struct;
 import java.util.Map;
 
 /**
@@ -25,6 +28,9 @@ public class ProblemController {
 
     @Autowired
     private ProblemService problemService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @GetMapping("/newlist/{labelid}/{page}/{size}")
     public Result newlist(@PathVariable String labelid, @PathVariable int page, @PathVariable int size) {
@@ -100,6 +106,11 @@ public class ProblemController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public Result add(@RequestBody Problem problem) {
+        Object user_claims = request.getAttribute("user_claims");
+        System.out.println("user_claims = " + user_claims);
+        if(null==user_claims){
+            return new Result(false, StatusCode.ACCESSERROR, "请先登录!");
+        }
         problemService.add(problem);
         return new Result(true, StatusCode.OK, "增加成功");
     }
