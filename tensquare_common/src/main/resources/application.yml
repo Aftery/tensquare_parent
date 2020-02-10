@@ -1,0 +1,8 @@
+jwt:
+  config:
+    key: aftery
+    ttl: 3600000
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
