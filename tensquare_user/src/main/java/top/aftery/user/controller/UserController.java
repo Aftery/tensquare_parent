@@ -41,14 +41,13 @@ public class UserController {
 
 
     /**
-     *
-     * @param userId  添加关注数用户的id
+     * @param userId   添加关注数用户的id
      * @param friendid 添加粉丝的用户id
-     * @param x 数量
+     * @param x        数量
      */
     @PostMapping("/{userId}/{friendid}/{x}")
-    public void updateFollowcountAndFanscount(@PathVariable String userId,@PathVariable String friendid,@PathVariable int x){
-        userService.updateFollowcountAndFanscount(x,userId,friendid);
+    public void updateFollowcountAndFanscount(@PathVariable String userId, @PathVariable String friendid, @PathVariable int x) {
+        userService.updateFollowcountAndFanscount(x, userId, friendid);
     }
 
     /**
@@ -105,7 +104,7 @@ public class UserController {
      *
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public Result findAll() {
         return new Result(true, StatusCode.OK, "查询成功", userService.findAll());
     }
@@ -116,7 +115,7 @@ public class UserController {
      * @param id ID
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public Result findById(@PathVariable String id) {
         return new Result(true, StatusCode.OK, "查询成功", userService.findById(id));
     }
@@ -130,7 +129,7 @@ public class UserController {
      * @param size      页大小
      * @return 分页结果
      */
-    @RequestMapping(value = "/search/{page}/{size}", method = RequestMethod.POST)
+    @PostMapping(value = "/search/{page}/{size}")
     public Result findSearch(@RequestBody Map searchMap, @PathVariable int page, @PathVariable int size) {
         Page<User> pageList = userService.findSearch(searchMap, page, size);
         return new Result(true, StatusCode.OK, "查询成功", new PageResult<User>(pageList.getTotalElements(), pageList.getContent()));
@@ -142,7 +141,7 @@ public class UserController {
      * @param searchMap
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @PostMapping(value = "/search")
     public Result findSearch(@RequestBody Map searchMap) {
         return new Result(true, StatusCode.OK, "查询成功", userService.findSearch(searchMap));
     }
@@ -152,7 +151,7 @@ public class UserController {
      *
      * @param user
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping()
     public Result add(@RequestBody User user) {
         userService.add(user);
         return new Result(true, StatusCode.OK, "增加成功");
@@ -163,7 +162,7 @@ public class UserController {
      *
      * @param user
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/{id}")
     public Result update(@RequestBody User user, @PathVariable String id) {
         user.setId(id);
         userService.update(user);
@@ -176,7 +175,7 @@ public class UserController {
      *
      * @param id
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public Result delete(@PathVariable String id) {
         userService.deleteById(id);
         return new Result(true, StatusCode.OK, "删除成功");

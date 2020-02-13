@@ -45,7 +45,7 @@ public class ArticleController {
      *
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public Result findAll() {
         return new Result(true, StatusCode.OK, "查询成功", articleService.findAll());
     }
@@ -56,7 +56,7 @@ public class ArticleController {
      * @param id ID
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     public Result findById(@PathVariable String id) {
         return new Result(true, StatusCode.OK, "查询成功", articleService.findById(id));
     }
@@ -70,7 +70,7 @@ public class ArticleController {
      * @param size      页大小
      * @return 分页结果
      */
-    @RequestMapping(value = "/search/{page}/{size}", method = RequestMethod.POST)
+    @PostMapping("/search/{page}/{size}")
     public Result findSearch(@RequestBody Map searchMap, @PathVariable int page, @PathVariable int size) {
         Page<Article> pageList = articleService.findSearch(searchMap, page, size);
         return new Result(true, StatusCode.OK, "查询成功", new PageResult<Article>(pageList.getTotalElements(), pageList.getContent()));
@@ -82,7 +82,7 @@ public class ArticleController {
      * @param searchMap
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @PostMapping("/search")
     public Result findSearch(@RequestBody Map searchMap) {
         return new Result(true, StatusCode.OK, "查询成功", articleService.findSearch(searchMap));
     }
@@ -92,7 +92,7 @@ public class ArticleController {
      *
      * @param article
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping()
     public Result add(@RequestBody Article article) {
         articleService.add(article);
         return new Result(true, StatusCode.OK, "增加成功");
@@ -103,7 +103,7 @@ public class ArticleController {
      *
      * @param article
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping("/{id}")
     public Result update(@RequestBody Article article, @PathVariable String id) {
         article.setId(id);
         articleService.update(article);
@@ -115,7 +115,7 @@ public class ArticleController {
      *
      * @param id
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable String id) {
         articleService.deleteById(id);
         return new Result(true, StatusCode.OK, "删除成功");

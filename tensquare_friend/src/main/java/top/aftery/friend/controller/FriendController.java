@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import top.aftery.common.entity.Result;
 import top.aftery.common.entity.StatusCode;
 import top.aftery.friend.client.UserClient;
-import top.aftery.friend.dao.NoFriendDao;
 import top.aftery.friend.service.FriendService;
 import top.aftery.friend.service.NoFriendService;
 

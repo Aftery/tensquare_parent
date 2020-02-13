@@ -37,12 +37,12 @@ public class ProblemController {
     private HttpServletRequest request;
 
     @Autowired
-    private LabelClient client;
+    private LabelClient labelClient;
 
     @GetMapping("/label/{labelid}")
     public Result findLabelById(@PathVariable String labelid){
 
-        return client.findById(labelid);
+        return labelClient.findById(labelid);
     }
 
     @GetMapping("/newlist/{labelid}/{page}/{size}")
@@ -70,7 +70,7 @@ public class ProblemController {
      *
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping()
     public Result findAll() {
         return new Result(true, StatusCode.OK, "查询成功", problemService.findAll());
     }
@@ -81,7 +81,7 @@ public class ProblemController {
      * @param id ID
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public Result findById(@PathVariable String id) {
         return new Result(true, StatusCode.OK, "查询成功", problemService.findById(id));
     }
@@ -95,7 +95,7 @@ public class ProblemController {
      * @param size      页大小
      * @return 分页结果
      */
-    @RequestMapping(value = "/search/{page}/{size}", method = RequestMethod.POST)
+    @PostMapping(value = "/search/{page}/{size}")
     public Result findSearch(@RequestBody Map searchMap, @PathVariable int page, @PathVariable int size) {
         Page<Problem> pageList = problemService.findSearch(searchMap, page, size);
         return new Result(true, StatusCode.OK, "查询成功", new PageResult<Problem>(pageList.getTotalElements(), pageList.getContent()));
@@ -107,7 +107,7 @@ public class ProblemController {
      * @param searchMap
      * @return
      */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @PostMapping(value = "/search")
     public Result findSearch(@RequestBody Map searchMap) {
         return new Result(true, StatusCode.OK, "查询成功", problemService.findSearch(searchMap));
     }
@@ -117,7 +117,7 @@ public class ProblemController {
      *
      * @param problem
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping()
     public Result add(@RequestBody Problem problem) {
         Object user_claims = request.getAttribute("user_claims");
         System.out.println("user_claims = " + user_claims);
@@ -133,7 +133,7 @@ public class ProblemController {
      *
      * @param problem
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping(value = "/{id}")
     public Result update(@RequestBody Problem problem, @PathVariable String id) {
         problem.setId(id);
         problemService.update(problem);
@@ -145,7 +145,7 @@ public class ProblemController {
      *
      * @param id
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public Result delete(@PathVariable String id) {
         problemService.deleteById(id);
         return new Result(true, StatusCode.OK, "删除成功");
