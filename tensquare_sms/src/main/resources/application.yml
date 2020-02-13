@@ -11,3 +11,9 @@ aliyun:
     accessSecret:
     SignName: 十次方验证码
     TemplateCode: SMS_183155363
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:6868/eureka/
+  instance:
+    prefer‐ip‐address: true
