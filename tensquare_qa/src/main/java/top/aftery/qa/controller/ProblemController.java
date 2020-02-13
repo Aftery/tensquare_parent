@@ -1,12 +1,15 @@
 package top.aftery.qa.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.netflix.discovery.converters.Auto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import top.aftery.common.entity.PageResult;
 import top.aftery.common.entity.Result;
 import top.aftery.common.entity.StatusCode;
+import top.aftery.qa.clien.LabelClient;
 import top.aftery.qa.pojo.Problem;
 import top.aftery.qa.service.ProblemService;
 
@@ -21,6 +24,7 @@ import java.util.Map;
  * @Date 2020/1/20 14:43
  * @Version 1.0
  */
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/problem")
@@ -31,6 +35,15 @@ public class ProblemController {
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private LabelClient client;
+
+    @GetMapping("/label/{labelid}")
+    public Result findLabelById(@PathVariable String labelid){
+
+        return client.findById(labelid);
+    }
 
     @GetMapping("/newlist/{labelid}/{page}/{size}")
     public Result newlist(@PathVariable String labelid, @PathVariable int page, @PathVariable int size) {

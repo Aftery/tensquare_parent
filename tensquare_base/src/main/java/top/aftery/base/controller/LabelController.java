@@ -1,5 +1,6 @@
 package top.aftery.base.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.util.List;
  * @Date 2020/1/17 14:33
  * @Version 1.0
  */
+@Slf4j
 @CrossOrigin
 @RestController
 @RequestMapping("/label")
@@ -34,6 +36,7 @@ public class LabelController {
 
     @GetMapping("/{labelId}")
     public Result findById(@PathVariable String labelId) {
+        log.info("2222222222222222{}",8003);
         return new Result(true, StatusCode.OK, "查询成功", labelService.findById(labelId));
     }
 

@@ -4,7 +4,6 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import top.aftery.common.util.JwtUtil;
 import top.aftery.user.dao.UserDao;
 import top.aftery.user.pojo.User;
@@ -25,7 +23,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Struct;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -58,6 +55,7 @@ public class UserService {
 
     @Autowired
     private JwtUtil jwtUtil;
+    private int x;
 
     /**
      * 用户登录
@@ -241,5 +239,17 @@ public class UserService {
             }
         };
 
+    }
+
+    /**
+     *
+     * @param x 数量
+     * @param userId   添加关注数用户的id
+     * @param friendid 添加粉丝的用户id
+     */
+    public void updateFollowcountAndFanscount(int x, String userId, String friendid) {
+
+        userDao.updateFollowcount(x,userId);
+        userDao.updatedFanscount(x,friendid);
     }
 }
