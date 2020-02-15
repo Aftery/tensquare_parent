@@ -41,6 +41,13 @@ docker run -di --name=tensquare_elasticsearch -p 9200:9200 -p 9300:9300 daocloud
 ![](doc/images/微信截图_20200201165049.png)
 
 
+
+### 模块说明
+1 :tensquare_manager :后台微服务网关
+----
+2 :tensquare_web: 前台的微服务网关
+----
+
  
 
 

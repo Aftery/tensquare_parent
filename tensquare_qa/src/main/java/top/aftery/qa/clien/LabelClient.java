@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import top.aftery.common.entity.Result;
+import top.aftery.qa.clien.impl.LabelClientImpl;
 
 /**
  * @ClassName LabelClient
@@ -14,7 +15,7 @@ import top.aftery.common.entity.Result;
  * @Version 1.0
  */
 @Component
-@FeignClient("tensquare-base")
+@FeignClient(value = "tensquare-base", fallback = LabelClientImpl.class)
 public interface LabelClient {
 
     @GetMapping("/label/{labelId}")
