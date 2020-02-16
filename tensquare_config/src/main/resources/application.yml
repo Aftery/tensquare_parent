@@ -7,5 +7,8 @@ spring:
     config:
       server:
         git:
-          uri: https://gitee.com/Aliezone/configs.git
+          uri: https://github.com/Aftery/tensquare_parent.git
           default-label: master
+          search-paths: configs
+          ##uri: https://gitee.com/Aliezone/configs.git
+          ##search-paths: paths
