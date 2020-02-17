@@ -7,6 +7,8 @@ spring:
     elasticsearch:
       cluster-nodes: 192.168.43.210:9300
       cluster-name: docker-cluster
+  rabbitmq:
+    host: 192.168.43.217
 eureka:
   client:
     service-url:

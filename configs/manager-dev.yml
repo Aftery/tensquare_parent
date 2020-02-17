@@ -3,16 +3,20 @@ server:
 spring:
   application:
     name: tensquare-manager
+  rabbitmq:
+    host: 192.168.43.217
 jwt:
   config:
     key: aftery
     ttl: 3600000
+
 eureka:
   client: #Eureka客户端与Eureka服务端进行交互的地址
     service-url:
       defaultZone: http://127.0.0.1:6868/eureka/
   instance:
     prefer-ip-address: true
+
 zuul:
   routes:
     tensquare-base:
