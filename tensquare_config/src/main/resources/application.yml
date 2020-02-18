@@ -13,9 +13,9 @@ spring:
           ##uri: https://gitee.com/Aliezone/configs.git
           ##search-paths: paths
   rabbitmq:
-    host: 192.168.43.217
+    host: 192.168.43.210
 management:
   endpoints:
       web:
         exposure:
-          include: bus‐refresh
+          include: bus-refresh

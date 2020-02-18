@@ -41,7 +41,7 @@ docker run -di --name=tensquare_elasticsearch -p 9200:9200 -p 9300:9300 daocloud
 ![](doc/images/微信截图_20200201165049.png)
 
 
-
+http://127.0.0.1:12000/actuator/bus-refresh  : 向mq发送消息使配置生效
 ### 模块说明
 1 :tensquare_manager :后台微服务网关
 ----
